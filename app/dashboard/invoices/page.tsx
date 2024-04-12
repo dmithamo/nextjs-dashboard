@@ -1,3 +1,4 @@
+import { fetchInvoicesPages } from '@/app/lib/data';
 import { lusitana } from '@/app/ui/fonts';
 import { CreateInvoice } from '@/app/ui/invoices/buttons';
 import Pagination from '@/app/ui/invoices/pagination';
@@ -12,7 +13,7 @@ export default async function Page({
   searchParams: { query?: string; page?: string };
 }) {
   const currentPage = Number(page);
-  const totalPages = 10;
+  const totalPages = await fetchInvoicesPages(query);
 
   return (
     <div className="w-full">

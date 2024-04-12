@@ -4,12 +4,20 @@ import { generatePagination } from '@/app/lib/utils';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import Link from 'next/link';
+import { usePathname, useSearchParams } from 'next/navigation';
 
-const createPageURL = (page) => '';
 export default function Pagination({ totalPages }: { totalPages: number }) {
   // NOTE: comment in this code when you get to this point in the course
 
-  const currentPage = 1;
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const createPageURL = (page: number) => {
+    const params = new URLSearchParams(searchParams);
+    params.set('page', page.toString());
+    return `${pathname}?${params.toString()}`;
+  };
+
+  const currentPage = Number(searchParams.get('page')) || 1;
   const allPages = generatePagination(currentPage, totalPages);
 
   return (
@@ -35,7 +43,7 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
             return (
               <PaginationNumber
                 key={page}
-                href={createPageURL(page)}
+                href={createPageURL(page as number)}
                 page={page}
                 position={position}
                 isActive={currentPage === page}
